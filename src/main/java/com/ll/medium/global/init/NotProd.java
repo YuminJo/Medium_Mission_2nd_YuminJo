@@ -47,6 +47,8 @@ public class NotProd {
             memberService.join("user4", "1234").getData()
         );
 
+        memberService.findByUsername("admin").ifPresent(member -> memberService.setIsPaidTrueByUsername("admin"));
+
         return memberList;
     }
 

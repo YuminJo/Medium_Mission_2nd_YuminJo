@@ -1,14 +1,16 @@
 package com.ll.medium.domain.member.member.service;
 
-import com.ll.medium.domain.member.member.entity.Member;
-import com.ll.medium.domain.member.member.repository.MemberRepository;
-import com.ll.medium.global.rsData.RsData.RsData;
-import lombok.RequiredArgsConstructor;
+import java.util.Optional;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import com.ll.medium.domain.member.member.entity.Member;
+import com.ll.medium.domain.member.member.repository.MemberRepository;
+import com.ll.medium.global.rsData.RsData.RsData;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -38,5 +40,11 @@ public class MemberService {
 
     public long count() {
         return memberRepository.count();
+    }
+
+    @Transactional
+    public RsData<Member> setIsPaidTrueByUsername(String username) {
+        memberRepository.setIsPaidTrueByUsername(username);
+        return RsData.of("200", "모든 회원의 isPaid를 true로 변경하였습니다.");
     }
 }
