@@ -47,6 +47,7 @@ public class NotProd {
             memberService.join("user4", "1234").getData()
         );
 
+        //테스트로 어드민만 유료회원으로 설정
         memberService.findByUsername("admin").ifPresent(member -> memberService.setIsPaidTrueByUsername("admin"));
 
         return memberList;
