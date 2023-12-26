@@ -16,7 +16,9 @@
 
     <div>
         <h3>내용</h3>
-        <div style="white-space: pre-wrap;" th:text="${post.body}"></div>
+        <div th:if="${post.isPaid == false}" style="white-space: pre-wrap;" th:text="${post.body}"></div>
+        <div th:if="${post.isPaid == true}" sec:authorize="hasRole('ROLE_PAID')" style="white-space: pre-wrap;" th:text="${post.body}"></div>
+        <div th:if="${post.isPaid == true}" sec:authorize="!hasRole('ROLE_PAID')" style="white-space: pre-wrap;">이 글은 유료멤버십전용 입니다.</div>
     </div>
 
     <hr>
