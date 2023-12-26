@@ -1,5 +1,7 @@
 package com.ll.medium.global.init;
 
+import java.util.List;
+import java.util.Random;
 import java.util.stream.IntStream;
 
 import org.springframework.boot.ApplicationRunner;
@@ -22,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 public class NotProd {
     private final MemberService memberService;
     private final PostService postService;
+    private final Random random = new Random();
 
     @Bean
     @Order(3)
@@ -29,22 +32,28 @@ public class NotProd {
         return args -> {
             if (memberService.findByUsername("user1").isPresent()) return;
 
-            Member memberUser1 = memberService.join("user1", "1234").getData();
-            Member memberUser2 = memberService.join("user2", "1234").getData();
-            Member memberUser3 = memberService.join("user3", "1234").getData();
-            Member memberUser4 = memberService.join("user4", "1234").getData();
+            List<Member> memberList = initializeMembers();
 
-            postService.write(memberUser1, "제목 1", "내용 1", true,false);
-            postService.write(memberUser1, "제목 2", "내용 2", true,true);
-            postService.write(memberUser1, "제목 3", "내용 3", false,false);
-            postService.write(memberUser1, "제목 4", "내용 4", true,true);
-
-            postService.write(memberUser2, "제목 5", "내용 5", true,false);
-            postService.write(memberUser2, "제목 6", "내용 6", false,true);
-
-            IntStream.rangeClosed(7, 50).forEach(i -> {
-                postService.write(memberUser3, "제목 " + i, "내용 " + i, true,false);
-            });
+            generatePosts(memberList, true, 1, 50);
+            generatePosts(memberList, false, 51, 100);
         };
+    }
+
+    private List<Member> initializeMembers() {
+        List<Member> memberList = List.of(
+            memberService.join("user1", "1234").getData(),
+            memberService.join("user2", "1234").getData(),
+            memberService.join("user3", "1234").getData(),
+            memberService.join("user4", "1234").getData()
+        );
+
+        return memberList;
+    }
+
+    private void generatePosts(List<Member> memberList, boolean isPaid, int start, int end) {
+        IntStream.rangeClosed(start, end).forEach(i -> {
+            int randomUser = random.nextInt(4);
+            postService.write(memberList.get(randomUser), "Paid Title " + i, "내용 " + i, true, isPaid);
+        });
     }
 }
