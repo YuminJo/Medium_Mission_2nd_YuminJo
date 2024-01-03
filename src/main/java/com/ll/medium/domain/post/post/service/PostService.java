@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ll.medium.domain.member.member.entity.Member;
 import com.ll.medium.domain.post.post.entity.Post;
 import com.ll.medium.domain.post.post.repository.PostRepository;
+import com.ll.medium.global.rsData.RsData.RsData;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,7 +21,7 @@ public class PostService {
 	private final PostRepository postRepository;
 
 	@Transactional
-	public void write(Member author, String title, String body, boolean isPublished, boolean isPaid) {
+	public RsData<Post> write(Member author, String title, String body, boolean isPublished, boolean isPaid) {
 		Post post = Post.builder()
 			.author(author)
 			.title(title)
@@ -30,6 +31,8 @@ public class PostService {
 			.build();
 
 		postRepository.save(post);
+
+		return RsData.of("200", "글이 작성되었습니다.", post);
 	}
 
 	@Transactional
@@ -52,9 +55,9 @@ public class PostService {
 	}
 
 	public Page<Post> search(String sortCode, String kwType, String kw, Pageable pageable) {
-		return postRepository.findByTitleContainingIgnoreCaseOrBodyContainingIgnoreCase(kw, kw, pageable);
+		//return postRepository.findByTitleContainingIgnoreCaseOrBodyContainingIgnoreCase(kw, kw, pageable);
 		// if (sortCode != null || kwType != null) {
-		// 	return postRepository.findBySortCodeAndKwTypeAndKw(sortCode, kwType, kw, kw, pageable);
+		return postRepository.findBySortCodeAndKwTypeAndKw(sortCode, kwType, kw, kw, pageable);
 		// } else
 		// 	return postRepository.findByTitleContainingIgnoreCaseOrBodyContainingIgnoreCase(kw, kw, pageable);
 	}

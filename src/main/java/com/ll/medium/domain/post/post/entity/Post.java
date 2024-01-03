@@ -60,6 +60,9 @@ public class Post {
     public void increaseHit() {
         hitCount++;
     }
+    public void setRandomIncreaseHit() {
+        hitCount += (int) (Math.random() * 10);
+    }
 
     public void addLike(Member member) {
         if (hasLike(member)) {

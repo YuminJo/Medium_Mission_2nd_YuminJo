@@ -47,6 +47,24 @@
     </th:block>
 </div>
 <script layout:fragment="script">
+    // 페이지 로딩 시 저장된 값으로 select 요소 초기화
+    document.addEventListener('DOMContentLoaded', function () {
+        const sortCodeElement = document.getElementById('sortCode');
+        const kwTypeElement = document.getElementById('kwType');
+
+        // 저장된 sortCode 값이 있다면 설정
+        const savedSortCode = localStorage.getItem('savedSortCode');
+        if (savedSortCode) {
+            sortCodeElement.value = savedSortCode;
+        }
+
+        // 저장된 kwType 값이 있다면 설정
+        const savedKwType = localStorage.getItem('savedKwType');
+        if (savedKwType) {
+            kwTypeElement.value = savedKwType;
+        }
+    });
+
     const btn_search = document.getElementById("btn_search");
     btn_search.addEventListener('click', function () {
         // 선택된 옵션의 값 가져오기
@@ -67,15 +85,22 @@
         // sortCode가 비어있지 않은 경우에만 설정
         if (sortCode.trim() !== "") {
             document.getElementById('sortCode').value = sortCode;
+
+            // sortCode 값 localStorage에 저장
+            localStorage.setItem('savedSortCode', sortCode);
         }
 
         if (kwType.trim() !== "") {
             document.getElementById('kwType').value = kwType;
+
+            // kwType 값 localStorage에 저장
+            localStorage.setItem('savedKwType', kwType);
         }
 
         // Form 전송
         document.getElementById('searchForm').submit();
     });
 </script>
+
 </body>
 </html>

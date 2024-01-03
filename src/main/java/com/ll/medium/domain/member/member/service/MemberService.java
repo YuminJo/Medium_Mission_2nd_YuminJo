@@ -56,6 +56,5 @@ public class MemberService {
 
 		return opMember.map(member -> RsData.of("200", "이미 존재합니다.", member))
 			.orElseGet(() -> join(username, "", nickname));
-
 	}
 }

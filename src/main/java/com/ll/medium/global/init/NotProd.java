@@ -13,6 +13,8 @@ import org.springframework.core.annotation.Order;
 
 import com.ll.medium.domain.member.member.entity.Member;
 import com.ll.medium.domain.member.member.service.MemberService;
+import com.ll.medium.domain.post.post.entity.Post;
+import com.ll.medium.domain.post.post.repository.PostRepository;
 import com.ll.medium.domain.post.post.service.PostService;
 
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 public class NotProd {
 	private final MemberService memberService;
 	private final PostService postService;
+	private final PostRepository postRepository;
 	private final Random random = new Random();
 
 	@Bean
@@ -63,7 +66,9 @@ public class NotProd {
 	private void generatePosts(List<Member> memberList, boolean isPaid, int start, int end) {
 		IntStream.rangeClosed(start, end).forEach(i -> {
 			int randomUser = random.nextInt(memberList.size());
-			postService.write(memberList.get(randomUser), "Paid Title " + i, "내용 " + i, true, isPaid);
+			Post post = postService.write(memberList.get(randomUser), "Paid Title " + i, "내용 " + i, true, isPaid).getData();
+			post.setRandomIncreaseHit();
+			postRepository.save(post);
 		});
 	}
 }
