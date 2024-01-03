@@ -21,34 +21,37 @@ import lombok.Setter;
 @RequestMapping("/member")
 @RequiredArgsConstructor
 public class MemberController {
-    private final MemberService memberService;
-    private final Rq rq;
+	private final MemberService memberService;
+	private final Rq rq;
 
-    @PreAuthorize("isAnonymous()")
-    @GetMapping("/join")
-    public String showJoin() {
-        return "domain/member/member/join";
-    }
+	@PreAuthorize("isAnonymous()")
+	@GetMapping("/join")
+	public String showJoin() {
+		return "domain/member/member/join";
+	}
 
-    @Setter
-    @Getter
-    public static class JoinForm {
-        @NotBlank
-        private String username;
-        @NotBlank
-        private String password;
-    }
+	@Setter
+	@Getter
+	public static class JoinForm {
+		@NotBlank
+		private String username;
+		@NotBlank
+		private String password;
+		@NotBlank
+		private String nickname;
+	}
 
-    @PreAuthorize("isAnonymous()")
-    @PostMapping("/join")
-    public String join(@Valid JoinForm joinForm) {
-        RsData<Member> joinRs = memberService.join(joinForm.getUsername(), joinForm.getPassword());
+	@PreAuthorize("isAnonymous()")
+	@PostMapping("/join")
+	public String join(@Valid JoinForm joinForm) {
+		RsData<Member> joinRs = memberService
+			.join(joinForm.getUsername(), joinForm.getPassword(), joinForm.getNickname());
 
-        return rq.redirectOrBack(joinRs, "/member/login");
-    }
+		return rq.redirectOrBack(joinRs, "/member/login");
+	}
 
-    @GetMapping("/login")
-    public String showLogin() {
-        return "domain/member/member/login";
-    }
+	@GetMapping("/login")
+	public String showLogin() {
+		return "domain/member/member/login";
+	}
 }

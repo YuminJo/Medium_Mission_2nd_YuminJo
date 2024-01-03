@@ -41,6 +41,7 @@ public class Member {
     private LocalDateTime modifyDate;
     private String username;
     private String password;
+    private String nickname;
     private boolean isPaid;
 
     public Collection<? extends GrantedAuthority> getAuthorities() {

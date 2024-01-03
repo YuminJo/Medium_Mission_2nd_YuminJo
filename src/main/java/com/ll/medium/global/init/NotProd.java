@@ -47,7 +47,7 @@ public class NotProd {
 		//유료 회원 100명 생성
 		IntStream.rangeClosed(1, 100).forEach(i -> {
 			String username = String.format("user%s", i);
-			Member member = memberService.join(username, "1234").getData();
+			Member member = memberService.join(username, "1234",username+i).getData();
 
 			//유료 회원으로 설정
 			memberService.findByUsername(username).ifPresent(user -> memberService.setIsPaidTrueByUsername(username));

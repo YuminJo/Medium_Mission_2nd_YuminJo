@@ -1,12 +1,14 @@
 package com.ll.medium.global.init;
 
-import com.ll.medium.domain.member.member.service.MemberService;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+
+import com.ll.medium.domain.member.member.service.MemberService;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Configuration
 @Slf4j
@@ -20,8 +22,8 @@ public class All {
         return args -> {
             if (memberService.findByUsername("system").isPresent()) return;
 
-            memberService.join("system", "1234");
-            memberService.join("admin", "1234");
+            memberService.join("system", "1234","SYSTEM");
+            memberService.join("admin", "1234","ADMIN");
         };
     }
 }
