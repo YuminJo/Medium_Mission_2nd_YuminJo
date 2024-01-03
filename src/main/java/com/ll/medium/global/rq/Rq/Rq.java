@@ -58,12 +58,10 @@ public class Rq {
     }
 
     public SecurityUser getUser() {
-        return Optional.ofNullable(SecurityContextHolder.getContext())
-            .map(SecurityContext::getAuthentication)
-            .map(Authentication::getPrincipal)
-            .filter(it -> it instanceof SecurityUser)
-            .map(it -> (SecurityUser) it)
-            .orElse(null);
+        return (SecurityUser)Optional.ofNullable(SecurityContextHolder.getContext())
+			.map(SecurityContext::getAuthentication)
+			.map(Authentication::getPrincipal)
+			.filter(it -> it instanceof SecurityUser).orElse(null);
     }
 
     public boolean isLogin() {
@@ -78,9 +76,9 @@ public class Rq {
         if (isLogout()) return false;
 
         return getUser()
-                .getAuthorities()
-                .stream()
-                .anyMatch(it -> it.getAuthority().equals("ROLE_ADMIN"));
+            .getAuthorities()
+            .stream()
+            .anyMatch(it -> it.getAuthority().equals("ROLE_ADMIN"));
     }
 
     public void setAttribute(String key, Object value) {

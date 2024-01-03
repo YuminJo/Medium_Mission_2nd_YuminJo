@@ -1,16 +1,17 @@
 package com.ll.medium.global.security;
 
-import com.ll.medium.domain.member.member.entity.Member;
-import com.ll.medium.domain.member.member.repository.MemberRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.User;
+import java.util.Optional;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import com.ll.medium.domain.member.member.entity.Member;
+import com.ll.medium.domain.member.member.repository.MemberRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -29,10 +30,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         Member member = opMember.get();
 
-        return new User(
-                member.getUsername(),
-                member.getPassword(),
-                member.getAuthorities()
+        return new SecurityUser(
+            member.getId(),
+            member.getUsername(),
+            member.getPassword(),
+            member.getAuthorities()
         );
     }
 }
