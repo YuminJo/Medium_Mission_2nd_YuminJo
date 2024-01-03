@@ -40,7 +40,11 @@ public class PostService {
 		return postRepository.findById(id);
 	}
 
-	public Page<Post> search(String kw, Pageable pageable) {
+	public Page<Post> search(String sortCode, String kwType, String kw, Pageable pageable) {
 		return postRepository.findByTitleContainingIgnoreCaseOrBodyContainingIgnoreCase(kw, kw, pageable);
+		// if (sortCode != null || kwType != null) {
+		// 	return postRepository.findBySortCodeAndKwTypeAndKw(sortCode, kwType, kw, kw, pageable);
+		// } else
+		// 	return postRepository.findByTitleContainingIgnoreCaseOrBodyContainingIgnoreCase(kw, kw, pageable);
 	}
 }

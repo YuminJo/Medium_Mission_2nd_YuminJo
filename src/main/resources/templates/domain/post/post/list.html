@@ -19,13 +19,63 @@
         </li>
     </ul>
 
+    <form th:action="@{/post/list}" method="get" id="searchForm">
+        <select class="form-control select-list-type border rounded-md p-2" id="sortCode" name="sortCode">
+            <option value class="text-gray-500">등록순</option>
+            <option value="idDesc" class="text-gray-500">추천순</option>
+            <option value="isAsc" class="text-gray-500">오래된순</option>
+            <option value="hitDesc" class="text-gray-500">조회수 높은순</option>
+            <option value="likeCountAsc" class="text-gray-500">추천수 낮은순</option>
+        </select>
+
+        <select class="form-control select-list-type border rounded-md p-2" id="kwType" name="kwType">
+            <option value class="text-gray-500">전체</option>
+            <option value="title" class="text-gray-500">제목</option>
+            <option value="body" class="text-gray-500">내용</option>
+            <option value="author" class="text-gray-500">작성자</option>
+        </select>
+
+        <input type="text" id="kw" name="kw" th:value="${kw}">
+        <input type="hidden" id="page" name="page" th:value="${postPage.getNumber() + 1}">
+        <button type="submit" id="btn_search">검색</button>
+    </form>
+
     <th:block th:with="queryStrBase = ${@rq.getCurrentQueryStringWithoutParam('page')}">
         <th:block th:replace="global/fragments/pagination :: pagination(${postPage}, ${queryStrBase}, 1)">
 
         </th:block>
     </th:block>
 </div>
+<script layout:fragment="script">
+    const btn_search = document.getElementById("btn_search");
+    btn_search.addEventListener('click', function () {
+        // 선택된 옵션의 값 가져오기
+        const sortCodeElement = document.getElementById('sortCode');
+        const selectedIndex = sortCodeElement.selectedIndex;
 
+        // selectedIndex가 -1이면 선택된 옵션이 없는 경우
+        const sortCode = selectedIndex !== -1 ? sortCodeElement.options[selectedIndex].value : 0;
+
+        const kw = document.getElementById('kw').value;
+        const kwType = document.getElementById('kwType').value;
+        const page = 1;  // 검색 버튼을 클릭할 경우 0페이지부터 조회한다.
+
+        // Form 요소에 값을 설정
+        document.getElementById('kw').value = kw;
+        document.getElementById('page').value = page;
+
+        // sortCode가 비어있지 않은 경우에만 설정
+        if (sortCode.trim() !== "") {
+            document.getElementById('sortCode').value = sortCode;
+        }
+
+        if (kwType.trim() !== "") {
+            document.getElementById('kwType').value = kwType;
+        }
+
+        // Form 전송
+        document.getElementById('searchForm').submit();
+    });
+</script>
 </body>
-
 </html>

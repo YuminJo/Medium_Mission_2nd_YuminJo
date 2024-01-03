@@ -1,5 +1,6 @@
 package com.ll.medium.global.init;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.IntStream;
@@ -22,41 +23,47 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class NotProd {
-    private final MemberService memberService;
-    private final PostService postService;
-    private final Random random = new Random();
+	private final MemberService memberService;
+	private final PostService postService;
+	private final Random random = new Random();
 
-    @Bean
-    @Order(3)
-    public ApplicationRunner initNotProd() {
-        return args -> {
-            if (memberService.findByUsername("user1").isPresent()) return;
+	@Bean
+	@Order(3)
+	public ApplicationRunner initNotProd() {
+		return args -> {
+			if (memberService.findByUsername("user1").isPresent())
+				return;
 
-            List<Member> memberList = initializeMembers();
+			List<Member> memberList = initializeMembers();
 
-            generatePosts(memberList, true, 1, 50);
-            generatePosts(memberList, false, 51, 100);
-        };
-    }
+			generatePosts(memberList, true, 1, 100);
+			generatePosts(memberList, false, 101, 111);
+		};
+	}
 
-    private List<Member> initializeMembers() {
-        List<Member> memberList = List.of(
-            memberService.join("user1", "1234").getData(),
-            memberService.join("user2", "1234").getData(),
-            memberService.join("user3", "1234").getData(),
-            memberService.join("user4", "1234").getData()
-        );
+	private List<Member> initializeMembers() {
+		List<Member> memberList = new ArrayList<>();
 
-        //테스트로 어드민만 유료회원으로 설정
-        memberService.findByUsername("admin").ifPresent(member -> memberService.setIsPaidTrueByUsername("admin"));
+		//유료 회원 100명 생성
+		IntStream.rangeClosed(1, 100).forEach(i -> {
+			String username = String.format("user%s", i);
+			Member member = memberService.join(username, "1234").getData();
 
-        return memberList;
-    }
+			//유료 회원으로 설정
+			memberService.findByUsername(username).ifPresent(user -> memberService.setIsPaidTrueByUsername(username));
+			memberList.add(member);
+		});
 
-    private void generatePosts(List<Member> memberList, boolean isPaid, int start, int end) {
-        IntStream.rangeClosed(start, end).forEach(i -> {
-            int randomUser = random.nextInt(4);
-            postService.write(memberList.get(randomUser), "Paid Title " + i, "내용 " + i, true, isPaid);
-        });
-    }
+		//테스트로 어드민만 유료회원으로 설정
+		//memberService.findByUsername("admin").ifPresent(member -> memberService.setIsPaidTrueByUsername("admin"));
+
+		return memberList;
+	}
+
+	private void generatePosts(List<Member> memberList, boolean isPaid, int start, int end) {
+		IntStream.rangeClosed(start, end).forEach(i -> {
+			int randomUser = random.nextInt(memberList.size());
+			postService.write(memberList.get(randomUser), "Paid Title " + i, "내용 " + i, true, isPaid);
+		});
+	}
 }
