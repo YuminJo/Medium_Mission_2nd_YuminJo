@@ -32,6 +32,17 @@ public class PostService {
 		postRepository.save(post);
 	}
 
+	@Transactional
+	public void modify(Post post, String title, String body, boolean published) {
+		post.setTitle(title);
+		post.setBody(body);
+		post.setPublished(published);
+	}
+
+	public boolean canModify(Member actor, Post post) {
+		return actor.equals(post.getAuthor());
+	}
+
 	public Object findTop30ByIsPublishedOrderByIdDesc(boolean isPublished) {
 		return postRepository.findTop30ByIsPublishedOrderByIdDesc(isPublished);
 	}
