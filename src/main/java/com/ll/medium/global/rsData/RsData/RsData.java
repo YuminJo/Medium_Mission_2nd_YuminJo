@@ -1,12 +1,12 @@
 package com.ll.medium.global.rsData.RsData;
 
+import static lombok.AccessLevel.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import static lombok.AccessLevel.PRIVATE;
-
-@AllArgsConstructor
+@AllArgsConstructor(access = PRIVATE)
 @NoArgsConstructor(access = PRIVATE)
 @Getter
 public class RsData<T> {

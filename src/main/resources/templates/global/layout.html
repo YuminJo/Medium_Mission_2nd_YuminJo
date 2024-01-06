@@ -3,6 +3,15 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- 테일윈드 불러오기 -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+    <!-- 폰트어썸 불러오기 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- 구글폰트 불러오기 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&display=swap" rel="stylesheet">
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
@@ -17,10 +26,12 @@
     </script>
 </head>
 <body>
+<!-- 네비게이션바 -->
+<nav th:replace="~{global/navbar :: navbarFragment}"></nav>
 
 <th:block layout:fragment="header"></th:block>
-
 <th:block layout:fragment="content"></th:block>
+<th:block layout:fragment="script"></th:block>
 
 <script>
     // history.back 에 의해서 돌아온 경우에 자바스크립트가 실행이 안될 수 도 잇다.
